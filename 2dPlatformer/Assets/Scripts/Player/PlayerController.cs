@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
@@ -118,6 +118,23 @@ public class PlayerController : MonoBehaviour
 
     // The player's current state (walking, idle, jumping, or falling)
     public PlayerState state = PlayerState.Idle;
+
+    [Header("Combat")]
+    public GameObject arrowPrefab;
+    public Transform arrowSpawnRight;
+    public Transform arrowSpawnLeft;
+    public float arrowSpeed = 14f;
+    public int arrowDamage = 1;
+    public float attackCooldown = 0.35f;
+
+    private float lastAttackTime;
+    private bool attacking;
+
+    #region Player State Variables
+    /// <summary>
+    /// Enum used for categorizing the player's state
+    /// </summary>
+    
     #endregion
 
     #region Functions
@@ -203,17 +220,42 @@ public class PlayerController : MonoBehaviour
         MovePlayer(movementForce);
     }
 
-    private bool attacking;
 
     private void HandleAttackInput()
     {
-        if (attackAction.triggered && state != PlayerState.Dead && !attacking)
+        if (attackAction.triggered && state != PlayerState.Dead && !attacking
+        && Time.time >= lastAttackTime + attackCooldown)
         {
             attacking = true;
+            lastAttackTime = Time.time;
             SetState(PlayerState.Attack);
-            StartCoroutine(Attack());
         }
     }
+
+    public void OnAttackFire()
+    {
+        if (arrowPrefab == null) return;
+
+        // Выбираем точку спавна по направлению
+        bool lookLeft = (spriteRenderer != null && spriteRenderer.flipX);
+        Transform spawn = lookLeft ? arrowSpawnLeft : arrowSpawnRight;
+
+        Vector3 spawnPos = (spawn != null) ? spawn.position : transform.position;
+        var go = Instantiate(arrowPrefab, spawnPos, Quaternion.identity);
+
+        var proj = go.GetComponent<ArrowProjectile>();
+        float dir = lookLeft ? -1f : 1f;
+        int shooterLayer = gameObject.layer;
+        if (proj != null)
+            proj.Launch(dir, arrowSpeed, arrowDamage, shooterLayer);
+    }
+
+    public void OnAttackAnimationEnd()
+    {
+        attacking = false;
+        // Вернёмся в нормальное состояние — твой DetermineState дальше разрулит Idle/Walk и т.д.
+    }
+
 
     /// <summary>
     /// Description:
@@ -296,13 +338,6 @@ public class PlayerController : MonoBehaviour
             }
             jumping = false;
         }
-    }
-
-    private IEnumerator Attack()
-    {
-        yield return new WaitForSeconds(0.33f);
-        attacking = false;
-        SetState(PlayerState.Idle);
     }
 
     /// <summary>

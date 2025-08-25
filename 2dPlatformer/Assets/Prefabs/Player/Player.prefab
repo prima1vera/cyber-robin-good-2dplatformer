@@ -391,6 +391,18 @@ MonoBehaviour:
       m_Action: Jump
       m_Flags: 0
     m_Flags: 0
+  attackAction:
+    m_Name: Attack
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 7cc9978f-1f92-411b-b095-7b2f2fd6d399
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  firePoint: {fileID: 0}
+  arrowPrefab: {fileID: 0}
+  arrowSpeed: 12
   state: 0
 --- !u!114 &8128307141711142836
 MonoBehaviour:
