@@ -129,11 +129,6 @@ public class PlayerController : MonoBehaviour
 
     private float lastAttackTime;
     private bool attacking;
-
-    #region Player State Variables
-    /// <summary>
-    /// Enum used for categorizing the player's state
-    /// </summary>
     
     #endregion
 
@@ -253,7 +248,6 @@ public class PlayerController : MonoBehaviour
     public void OnAttackAnimationEnd()
     {
         attacking = false;
-        // Вернёмся в нормальное состояние — твой DetermineState дальше разрулит Idle/Walk и т.д.
     }
 
 
