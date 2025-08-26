@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ArrowProjectile : MonoBehaviour
@@ -24,7 +25,6 @@ public class ArrowProjectile : MonoBehaviour
         this.damage = dmg;
         this.shooterLayer = shooterLayer;
 
-        rb.gravityScale = 0f;
         rb.velocity = new Vector2(dir * speed, 0f);
 
         // Отзеркалим визуал при полёте влево (если надо)
@@ -34,20 +34,53 @@ public class ArrowProjectile : MonoBehaviour
         Destroy(gameObject, maxLifetime);
     }
 
+    void FixedUpdate()
+    {
+        if (stuck) return;
+
+        // Поворачиваем стрелу по текущей скорости
+        if (rb.velocity != Vector2.zero)
+        {
+            float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (stuck) return;
         if (other.gameObject.layer == shooterLayer) return; // не бьём себя
 
         // Наносим урон, если есть Health
-        var health = other.GetComponent<Health>();
+        var health = other.GetComponentInParent<Health>();
         if (health != null)
         {
-            // примерный вызов — подстрой под свой Health
             health.TakeDamage(damage);
+
+            // визуальный эффект — покраснение
+            var sr = other.GetComponentInParent<SpriteRenderer>();
+            if (sr != null)
+                StartCoroutine(HitFlash(sr));
+
+            // отскок врага назад
+            var rbEnemy = other.GetComponentInParent<Rigidbody2D>();
+            if (rbEnemy != null)
+            {
+                Vector2 knockbackDir = (other.transform.position - transform.position).normalized;
+                rbEnemy.AddForce(knockbackDir * 5f, ForceMode2D.Impulse); // сила 5 можно подбирать
+            }
         }
 
         StickTo(other.transform);
+    }
+
+    // корутина для покраснения
+    private IEnumerator HitFlash(SpriteRenderer sr)
+    {
+        Color original = sr.color;
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.15f);
+        sr.color = original;
     }
 
     void StickTo(Transform target)
