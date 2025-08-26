@@ -9,14 +9,6 @@ public class AnimationEventProxy : MonoBehaviour
         playerController = GetComponentInParent<PlayerController>();
     }
 
-    public void OnAttackAnimationEnd()
-    {
-        if (playerController != null)
-        {
-            playerController.OnAttackAnimationEnd();
-        }
-    }
-
     public void OnAttackFire()
     {
         if (playerController != null)

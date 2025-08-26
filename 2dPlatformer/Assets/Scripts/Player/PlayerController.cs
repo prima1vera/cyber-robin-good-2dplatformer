@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour
         {
             attacking = true;
             lastAttackTime = Time.time;
-            SetState(PlayerState.Attack);
+            // SetState(PlayerState.Attack);
         }
     }
 
@@ -231,7 +231,6 @@ public class PlayerController : MonoBehaviour
     {
         if (arrowPrefab == null) return;
 
-        // Выбираем точку спавна по направлению
         bool lookLeft = (spriteRenderer != null && spriteRenderer.flipX);
         Transform spawn = lookLeft ? arrowSpawnLeft : arrowSpawnRight;
 
@@ -439,13 +438,6 @@ public class PlayerController : MonoBehaviour
             SetState(PlayerState.Dead);
             return;
         }
-
-        if (attacking)
-        {
-            SetState(PlayerState.Attack);
-            return;
-        }
-
         else if (grounded)
         {
             if (playerRigidbody.velocity.magnitude > 0)
@@ -471,6 +463,12 @@ public class PlayerController : MonoBehaviour
             {
                 SetState(PlayerState.Fall);
             }
+        }
+
+        if (attacking)
+        {
+            SetState(PlayerState.Attack);
+            return;
         }
     }
     #endregion
