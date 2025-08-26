@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -34,44 +33,36 @@ public class Health : MonoBehaviour
     [Tooltip("The amount of time to wait before respawning")]
     public float respawnWaitTime = 3f;
 
-    /// <summary>
-    /// Description:
-    /// Standard Unity function called once before the first update
-    /// Input:
-    /// none
-    /// Return:
-    /// void (no return)
-    /// </summary>
+    // The time to respawn at
+    private float respawnTime;
+    // The specific game time when the health can be damaged again
+    private float timeToBecomeDamagableAgain = 0;
+    // Whether or not the health is invincible
+    public bool isInvincible = false;
+    // The position that the health's gameobject will respawn at
+    private Vector3 respawnPosition;
+
+    [Header("Effects & Polish")]
+    [Tooltip("The effect to create when this health dies")]
+    public GameObject deathEffect;
+    [Tooltip("The effect to create when this health is damaged (but does not die)")]
+    public GameObject hitEffect;
+
+    [Header("Hit Reaction Settings")]
+    public float knockbackForce = 5f;   // сила отбрасывания
+    public float flashDuration = 0.15f; // сколько длится покраснение
+
     void Start()
     {
         SetRespawnPoint(transform.position);
     }
 
-    /// <summary>
-    /// Description:
-    /// Standard Unity function called once per frame
-    /// Input:
-    /// none
-    /// Return:
-    /// void (no return)
-    /// </summary>
     void Update()
     {
         InvincibilityCheck();
         RespawnCheck();
     }
 
-    // The time to respawn at
-    private float respawnTime;
-    
-    /// <summary>
-    /// Description:
-    /// Checks to see if the player should be respawned yet and only respawns them if the alloted time has passed
-    /// Input:
-    /// none
-    /// Return:
-    /// void (no return)
-    /// </summary>
     private void RespawnCheck()
     {
         if (respawnWaitTime != 0 && currentHealth <= 0 && currentLives > 0)
@@ -83,20 +74,6 @@ public class Health : MonoBehaviour
         }
     }
 
-    // The specific game time when the health can be damaged again
-    private float timeToBecomeDamagableAgain = 0;
-    // Whether or not the health is invincible
-    public bool isInvincible = false;
-
-    /// <summary>
-    /// Description:
-    /// Checks against the current time and the time when the health can be damaged again.
-    /// Removes invicibility if the time frame has passed
-    /// Input:
-    /// None
-    /// Returns:
-    /// void (no return)
-    /// </summary>
     private void InvincibilityCheck()
     {
         if (timeToBecomeDamagableAgain <= Time.time)
@@ -105,31 +82,11 @@ public class Health : MonoBehaviour
         }
     }
 
-    // The position that the health's gameobject will respawn at
-    private Vector3 respawnPosition;
-
-    /// <summary>
-    /// Description:
-    /// Changes the respawn position to a new position
-    /// Input:
-    /// Vector3 newRespawnPosition
-    /// Returns:
-    /// void (no return)
-    /// </summary>
-    /// <param name="newRespawnPosition">The new position to respawn at</param>
     public void SetRespawnPoint(Vector3 newRespawnPosition)
     {
         respawnPosition = newRespawnPosition;
     }
 
-    /// <summary>
-    /// Description:
-    /// Repositions the health's game object to the respawn position and resets the health to the default value
-    /// Input:
-    /// None
-    /// Returns:
-    /// void (no return)
-    /// </summary>
     void Respawn()
     {
         transform.position = respawnPosition;
@@ -138,15 +95,9 @@ public class Health : MonoBehaviour
     }
 
     /// <summary>
-    /// Description:
-    /// Applies damage to the health unless the health is invincible.
-    /// Input:
-    /// int damageAmount
-    /// Returns:
-    /// void (no return)
+    /// Applies damage and plays hit reaction (knockback + flash).
     /// </summary>
-    /// <param name="damageAmount">The amount of damage to take</param>
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(int damageAmount, Vector2? hitSource = null)
     {
         if (isInvincible || currentHealth <= 0)
         {
@@ -158,23 +109,23 @@ public class Health : MonoBehaviour
             {
                 Instantiate(hitEffect, transform.position, transform.rotation, null);
             }
+
             timeToBecomeDamagableAgain = Time.time + invincibilityTime;
             isInvincible = true;
             currentHealth -= damageAmount;
+
+            // эффекты попадания
+            StartCoroutine(HitFlash());
+            if (hitSource.HasValue)
+            {
+                ApplyKnockback((Vector2)hitSource);
+            }
+
             CheckDeath();
         }
         GameManager.UpdateUIElements();
     }
 
-    /// <summary>
-    /// Description:
-    /// Applies healing to the health, capped out at the maximum health.
-    /// Input:
-    /// int healingAmount
-    /// Returns:
-    /// void (no return)
-    /// </summary>
-    /// <param name="healingAmount">How much healing to apply</param>
     public void ReceiveHealing(int healingAmount)
     {
         currentHealth += healingAmount;
@@ -186,15 +137,6 @@ public class Health : MonoBehaviour
         GameManager.UpdateUIElements();
     }
 
-    /// <summary>
-    /// Description:
-    /// Gives the health script more lives if the health is using lives
-    /// Input:
-    /// int bonusLives
-    /// Return:
-    /// void
-    /// </summary>
-    /// <param name="bonusLives">The number of lives to add</param>
     public void AddLives(int bonusLives)
     {
         if (useLives)
@@ -208,22 +150,6 @@ public class Health : MonoBehaviour
         }
     }
 
-    [Header("Effects & Polish")]
-    [Tooltip("The effect to create when this health dies")]
-    public GameObject deathEffect;
-    [Tooltip("The effect to create when this health is damaged (but does not die)")]
-    public GameObject hitEffect;
-
-    /// <summary>
-    /// Description:
-    /// Checks if the health is dead or not. If it is, true is returned, false otherwise.
-    /// Calls Die() if the health is dead.
-    /// Input:
-    /// None
-    /// Return:
-    /// bool
-    /// </summary>
-    /// <returns>bool: a boolean value representing if the health has died or not (true for dead)</returns>
     bool CheckDeath()
     {
         if (currentHealth <= 0)
@@ -234,15 +160,6 @@ public class Health : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// Description:
-    /// Handles the death of the health. If a death effect is set, it is created. If lives are being used, the health is respawned.
-    /// If lives are not being used or the lives are 0 then the health's game object is destroyed.
-    /// Input:
-    /// None
-    /// Returns:
-    /// void (no return)
-    /// </summary>
     void Die()
     {
         if (deathEffect != null)
@@ -262,7 +179,7 @@ public class Health : MonoBehaviour
                 else
                 {
                     respawnTime = Time.time + respawnWaitTime;
-                } 
+                }
             }
             else
             {
@@ -276,7 +193,6 @@ public class Health : MonoBehaviour
                 }
                 GameOver();
             }
-            
         }
         else
         {
@@ -286,19 +202,34 @@ public class Health : MonoBehaviour
         GameManager.UpdateUIElements();
     }
 
-    /// <summary>
-    /// Description:
-    /// Tries to notify the game manager that the game is over
-    /// Input: 
-    /// none
-    /// Return: 
-    /// void (no return)
-    /// </summary>
     public void GameOver()
     {
         if (GameManager.instance != null && gameObject.tag == "Player")
         {
             GameManager.instance.GameOver();
+        }
+    }
+
+    // 🔹 Дополнительные методы для реакции на попадание
+    private IEnumerator HitFlash()
+    {
+        var sr = GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
+        {
+            Color original = sr.color;
+            sr.color = Color.red;
+            yield return new WaitForSeconds(flashDuration);
+            sr.color = original;
+        }
+    }
+
+    private void ApplyKnockback(Vector2 hitSource)
+    {
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Vector2 knockbackDir = ((Vector2)transform.position - hitSource).normalized;
+            rb.AddForce(knockbackDir * knockbackForce, ForceMode2D.Impulse);
         }
     }
 }
