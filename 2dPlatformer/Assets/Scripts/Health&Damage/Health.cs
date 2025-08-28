@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -22,6 +23,7 @@ public class Health : MonoBehaviour
     public int currentHealth = 1;
     [Tooltip("Invulnerability duration, in seconds, after taking damage")]
     public float invincibilityTime = 3f;
+    public bool isInvincible = false;
 
     [Header("Lives settings")]
     [Tooltip("Whether or not to use lives")]
@@ -33,35 +35,40 @@ public class Health : MonoBehaviour
     [Tooltip("The amount of time to wait before respawning")]
     public float respawnWaitTime = 3f;
 
-    // The time to respawn at
-    private float respawnTime;
-    // The specific game time when the health can be damaged again
-    private float timeToBecomeDamagableAgain = 0;
-    // Whether or not the health is invincible
-    public bool isInvincible = false;
-    // The position that the health's gameobject will respawn at
-    private Vector3 respawnPosition;
-
     [Header("Effects & Polish")]
     [Tooltip("The effect to create when this health dies")]
     public GameObject deathEffect;
     [Tooltip("The effect to create when this health is damaged (but does not die)")]
     public GameObject hitEffect;
 
-    [Header("Hit Reaction Settings")]
-    public float knockbackForce = 5f;   // сила отбрасывания
-    public float flashDuration = 0.15f; // сколько длится покраснение
+    [Header("Hit Reaction (optional)")]
+    [Tooltip("If present, will play flash/knockback on hit")]
+    public HitReaction2D hitReaction;
 
+    void Awake()
+    {
+        if (hitReaction == null) hitReaction = GetComponent<HitReaction2D>();
+    }
+
+    /// <summary>
+    /// Standard Unity function called once before the first update
+    /// </summary>
     void Start()
     {
         SetRespawnPoint(transform.position);
     }
 
+    /// <summary>
+    /// Standard Unity function called once per frame
+    /// </summary>
     void Update()
     {
         InvincibilityCheck();
         RespawnCheck();
     }
+
+    // The time to respawn at
+    private float respawnTime;
 
     private void RespawnCheck()
     {
@@ -74,6 +81,8 @@ public class Health : MonoBehaviour
         }
     }
 
+    private float timeToBecomeDamagableAgain = 0;
+
     private void InvincibilityCheck()
     {
         if (timeToBecomeDamagableAgain <= Time.time)
@@ -81,6 +90,9 @@ public class Health : MonoBehaviour
             isInvincible = false;
         }
     }
+
+    // The position that the health's gameobject will respawn at
+    private Vector3 respawnPosition;
 
     public void SetRespawnPoint(Vector3 newRespawnPosition)
     {
@@ -94,10 +106,16 @@ public class Health : MonoBehaviour
         GameManager.UpdateUIElements();
     }
 
-    /// <summary>
-    /// Applies damage and plays hit reaction (knockback + flash).
-    /// </summary>
-    public void TakeDamage(int damageAmount, Vector2? hitSource = null)
+    // ===== DAMAGE API =====
+
+    // Старый вызов остаётся
+    public void TakeDamage(int damageAmount)
+    {
+        TakeDamage(damageAmount, null, null, 0f);
+    }
+
+    // Новый — с опциональными контекстами удара
+    public void TakeDamage(int damageAmount, Transform hitSource = null, Vector2? hitPoint = null, float knockbackForce = 0f)
     {
         if (isInvincible || currentHealth <= 0)
         {
@@ -109,16 +127,15 @@ public class Health : MonoBehaviour
             {
                 Instantiate(hitEffect, transform.position, transform.rotation, null);
             }
-
             timeToBecomeDamagableAgain = Time.time + invincibilityTime;
             isInvincible = true;
+
             currentHealth -= damageAmount;
 
-            // эффекты попадания
-            StartCoroutine(HitFlash());
-            if (hitSource.HasValue)
+            // Визуал/нокаут (если компонент есть)
+            if (hitReaction != null)
             {
-                ApplyKnockback((Vector2)hitSource);
+                hitReaction.OnHit(hitSource, hitPoint, knockbackForce);
             }
 
             CheckDeath();
@@ -193,6 +210,7 @@ public class Health : MonoBehaviour
                 }
                 GameOver();
             }
+
         }
         else
         {
@@ -207,29 +225,6 @@ public class Health : MonoBehaviour
         if (GameManager.instance != null && gameObject.tag == "Player")
         {
             GameManager.instance.GameOver();
-        }
-    }
-
-    // 🔹 Дополнительные методы для реакции на попадание
-    private IEnumerator HitFlash()
-    {
-        var sr = GetComponentInChildren<SpriteRenderer>();
-        if (sr != null)
-        {
-            Color original = sr.color;
-            sr.color = Color.red;
-            yield return new WaitForSeconds(flashDuration);
-            sr.color = original;
-        }
-    }
-
-    private void ApplyKnockback(Vector2 hitSource)
-    {
-        var rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            Vector2 knockbackDir = ((Vector2)transform.position - hitSource).normalized;
-            rb.AddForce(knockbackDir * knockbackForce, ForceMode2D.Impulse);
         }
     }
 }

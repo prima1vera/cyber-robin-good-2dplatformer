@@ -120,9 +120,11 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -0.08907318, y: 0.36864233}
+      - {x: -0.21251392, y: 0.10356879}
       - {x: -0.37067795, y: 0.043349266}
       - {x: -0.032096863, y: 0.062125683}
       - {x: 0.34698486, y: 0.049768925}
+      - {x: 0.18425179, y: 0.093013324}
       - {x: 0.08257675, y: 0.3535838}
   m_UseDelaunayMesh: 0
 --- !u!1 &1668180095173353846
@@ -141,6 +143,7 @@ GameObject:
   - component: {fileID: 5720975588195881696}
   - component: {fileID: 1167797280935117621}
   - component: {fileID: 1738877542591755924}
+  - component: {fileID: 7300964462355967768}
   m_Layer: 9
   m_Name: BasicWalkingEnemy
   m_TagString: Untagged
@@ -319,17 +322,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamId: 1
-  defaultHealth: 1
-  maximumHealth: 1
-  currentHealth: 1
+  defaultHealth: 5
+  maximumHealth: 5
+  currentHealth: 5
   invincibilityTime: 0
+  isInvincible: 0
   useLives: 0
   currentLives: 3
   maximumLives: 5
   respawnWaitTime: 3
-  isInvincible: 0
   deathEffect: {fileID: 8947246785620148104, guid: c4d99970794d9f0468b2e2a51a6bc976, type: 3}
   hitEffect: {fileID: 93431346535372284, guid: 7a1ea1c65fff14c41b5fafe65981feae, type: 3}
+  hitReaction: {fileID: 7300964462355967768}
 --- !u!61 &1738877542591755924
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -375,6 +379,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7004852, y: 0.1131897}
   m_EdgeRadius: 0
+--- !u!114 &7300964462355967768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668180095173353846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaf374ba10f3ab7419d51fb1c2a7faeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashDuration: 0.12
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  defaultKnockbackForce: 2.5
+  verticalBonus: 0.25
 --- !u!1 &1668180095416603666
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,12 +683,38 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -0.3273926, y: 0.01533699}
-      - {x: -0.4804382, y: -0.09652567}
-      - {x: -0.4895782, y: -0.3924475}
-      - {x: -0.3574905, y: -0.6099319}
+      - {x: -0.3991971, y: -0.033812016}
+      - {x: -0.41011333, y: -0.0925622}
+      - {x: -0.30370426, y: -0.205721}
+      - {x: -0.3743286, y: -0.21396339}
+      - {x: -0.40484905, y: -0.1564908}
+      - {x: -0.492249, y: -0.17034152}
+      - {x: -0.53425455, y: -0.18897313}
+      - {x: -0.56118107, y: -0.24886906}
+      - {x: -0.43890953, y: -0.25864348}
+      - {x: -0.4373846, y: -0.34393993}
+      - {x: -0.5632386, y: -0.34287986}
+      - {x: -0.56143904, y: -0.37032717}
+      - {x: -0.5240912, y: -0.40229777}
+      - {x: -0.41450262, y: -0.43705404}
+      - {x: -0.37591648, y: -0.40596765}
+      - {x: -0.20647907, y: -0.29405528}
+      - {x: -0.1606245, y: -0.369757}
+      - {x: -0.16888142, y: -0.40612555}
+      - {x: -0.19255161, y: -0.43176824}
+      - {x: -0.3091092, y: -0.46875048}
+      - {x: -0.3106413, y: -0.52705264}
+      - {x: -0.3431573, y: -0.5338375}
+      - {x: -0.3476276, y: -0.6059869}
       - {x: 0.35749054, y: -0.60993195}
-      - {x: 0.48957825, y: -0.39244747}
-      - {x: 0.48043823, y: -0.09652567}
+      - {x: 0.30831766, y: -0.5286184}
+      - {x: 0.28273344, y: -0.47431642}
+      - {x: 0.27771807, y: -0.4379983}
+      - {x: 0.3456273, y: -0.37667394}
+      - {x: 0.40574026, y: -0.34134614}
+      - {x: 0.4392724, y: -0.28808832}
+      - {x: 0.49253082, y: -0.28019825}
+      - {x: 0.50016356, y: -0.12019582}
       - {x: 0.32739258, y: 0.01533699}
   m_UseDelaunayMesh: 0
 --- !u!1 &3502852447483555577
@@ -682,7 +728,7 @@ GameObject:
   - component: {fileID: 3106064713681178979}
   - component: {fileID: 5842111123837050720}
   - component: {fileID: 4532630679372128672}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GroundTestLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -778,7 +824,7 @@ GameObject:
   - component: {fileID: 6498272042444196730}
   - component: {fileID: 1343679326160716715}
   - component: {fileID: 8548067531479971156}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GroundTestRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
