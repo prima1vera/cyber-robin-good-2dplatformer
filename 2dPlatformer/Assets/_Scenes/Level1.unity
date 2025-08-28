@@ -1094,7 +1094,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -2080,10 +2080,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf374ba10f3ab7419d51fb1c2a7faeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flashDuration: 0.12
   flashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.12
   defaultKnockbackForce: 2.5
-  verticalBonus: 0.25
 --- !u!1001 &1440000956
 PrefabInstance:
   m_ObjectHideFlags: 0

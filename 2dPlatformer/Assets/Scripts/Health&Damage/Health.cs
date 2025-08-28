@@ -1,103 +1,91 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 
-/// <summary>
-/// This class handles the health state of a game object.
-/// 
-/// Implementation Notes: 2D Rigidbodies must be set to never sleep for this to interact with trigger stay damage
-/// </summary>
-public class Health : MonoBehaviour
+[RequireComponent(typeof(HitReaction2D))]
+public class Health : MonoBehaviour, IDamageable
 {
     [Header("Team Settings")]
-    [Tooltip("The team associated with this damage")]
     public int teamId = 0;
 
     [Header("Health Settings")]
-    [Tooltip("The default health value")]
     public int defaultHealth = 1;
-    [Tooltip("The maximum health value")]
     public int maximumHealth = 1;
-    [Tooltip("The current in game health value")]
     public int currentHealth = 1;
-    [Tooltip("Invulnerability duration, in seconds, after taking damage")]
-    public float invincibilityTime = 3f;
-    public bool isInvincible = false;
 
-    [Header("Lives settings")]
-    [Tooltip("Whether or not to use lives")]
+    [Tooltip("Invulnerability duration (sec) after taking damage.")]
+    public float invincibilityTime = 0.3f;
+    private bool isInvincible = false;
+    private float timeToBecomeDamageable = 0f;
+
+    [Header("Lives")]
     public bool useLives = false;
-    [Tooltip("Current number of lives this health has")]
     public int currentLives = 3;
-    [Tooltip("The maximum number of lives this health has")]
     public int maximumLives = 5;
-    [Tooltip("The amount of time to wait before respawning")]
     public float respawnWaitTime = 3f;
+    private float respawnTime;
+    private Vector3 respawnPosition;
 
-    [Header("Effects & Polish")]
-    [Tooltip("The effect to create when this health dies")]
-    public GameObject deathEffect;
-    [Tooltip("The effect to create when this health is damaged (but does not die)")]
+    [Header("Effects")]
     public GameObject hitEffect;
+    public GameObject deathEffect;
 
-    [Header("Hit Reaction (optional)")]
-    [Tooltip("If present, will play flash/knockback on hit")]
-    public HitReaction2D hitReaction;
+    private HitReaction2D hitReaction;
 
     void Awake()
     {
-        if (hitReaction == null) hitReaction = GetComponent<HitReaction2D>();
-    }
-
-    /// <summary>
-    /// Standard Unity function called once before the first update
-    /// </summary>
-    void Start()
-    {
+        hitReaction = GetComponent<HitReaction2D>();
         SetRespawnPoint(transform.position);
+        currentHealth = defaultHealth;
     }
 
-    /// <summary>
-    /// Standard Unity function called once per frame
-    /// </summary>
     void Update()
     {
-        InvincibilityCheck();
-        RespawnCheck();
-    }
-
-    // The time to respawn at
-    private float respawnTime;
-
-    private void RespawnCheck()
-    {
-        if (respawnWaitTime != 0 && currentHealth <= 0 && currentLives > 0)
-        {
-            if (Time.time >= respawnTime)
-            {
-                Respawn();
-            }
-        }
-    }
-
-    private float timeToBecomeDamagableAgain = 0;
-
-    private void InvincibilityCheck()
-    {
-        if (timeToBecomeDamagableAgain <= Time.time)
-        {
+        if (isInvincible && Time.time >= timeToBecomeDamageable)
             isInvincible = false;
-        }
+
+        if (respawnWaitTime != 0 && currentHealth <= 0 && currentLives > 0 && Time.time >= respawnTime)
+            Respawn();
     }
 
-    // The position that the health's gameobject will respawn at
-    private Vector3 respawnPosition;
-
-    public void SetRespawnPoint(Vector3 newRespawnPosition)
+    // ===== IDamageable =====
+    public void TakeDamage(int damageAmount, Transform hitSource = null, Vector2? hitPoint = null, float knockbackForce = 0f)
     {
-        respawnPosition = newRespawnPosition;
+        if (isInvincible || currentHealth <= 0)
+            return;
+
+        if (hitEffect != null)
+            Instantiate(hitEffect, transform.position, Quaternion.identity);
+
+        isInvincible = true;
+        timeToBecomeDamageable = Time.time + invincibilityTime;
+
+        currentHealth -= damageAmount;
+
+        if (hitReaction != null)
+        {
+            hitReaction.OnHit(hitSource, hitPoint, knockbackForce);
+        }
+
+        if (currentHealth <= 0)
+            Die();
+
+        GameManager.UpdateUIElements();
     }
+
+    public void ReceiveHealing(int amount)
+    {
+        currentHealth = Mathf.Min(currentHealth + amount, maximumHealth);
+        GameManager.UpdateUIElements();
+    }
+
+    // ===== Lives & Respawn =====
+    public void AddLives(int amount)
+    {
+        if (!useLives) return;
+        currentLives = Mathf.Min(currentLives + amount, maximumLives);
+        GameManager.UpdateUIElements();
+    }
+
+    public void SetRespawnPoint(Vector3 newPoint) => respawnPosition = newPoint;
 
     void Respawn()
     {
@@ -106,125 +94,35 @@ public class Health : MonoBehaviour
         GameManager.UpdateUIElements();
     }
 
-    // ===== DAMAGE API =====
-
-    // Старый вызов остаётся
-    public void TakeDamage(int damageAmount)
-    {
-        TakeDamage(damageAmount, null, null, 0f);
-    }
-
-    // Новый — с опциональными контекстами удара
-    public void TakeDamage(int damageAmount, Transform hitSource = null, Vector2? hitPoint = null, float knockbackForce = 0f)
-    {
-        if (isInvincible || currentHealth <= 0)
-        {
-            return;
-        }
-        else
-        {
-            if (hitEffect != null)
-            {
-                Instantiate(hitEffect, transform.position, transform.rotation, null);
-            }
-            timeToBecomeDamagableAgain = Time.time + invincibilityTime;
-            isInvincible = true;
-
-            currentHealth -= damageAmount;
-
-            // Визуал/нокаут (если компонент есть)
-            if (hitReaction != null)
-            {
-                hitReaction.OnHit(hitSource, hitPoint, knockbackForce);
-            }
-
-            CheckDeath();
-        }
-        GameManager.UpdateUIElements();
-    }
-
-    public void ReceiveHealing(int healingAmount)
-    {
-        currentHealth += healingAmount;
-        if (currentHealth > maximumHealth)
-        {
-            currentHealth = maximumHealth;
-        }
-        CheckDeath();
-        GameManager.UpdateUIElements();
-    }
-
-    public void AddLives(int bonusLives)
-    {
-        if (useLives)
-        {
-            currentLives += bonusLives;
-            if (currentLives > maximumLives)
-            {
-                currentLives = maximumLives;
-            }
-            GameManager.UpdateUIElements();
-        }
-    }
-
-    bool CheckDeath()
-    {
-        if (currentHealth <= 0)
-        {
-            Die();
-            return true;
-        }
-        return false;
-    }
-
     void Die()
     {
         if (deathEffect != null)
-        {
-            Instantiate(deathEffect, transform.position, transform.rotation, null);
-        }
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
 
         if (useLives)
         {
-            currentLives -= 1;
+            currentLives--;
             if (currentLives > 0)
             {
-                if (respawnWaitTime == 0)
-                {
-                    Respawn();
-                }
-                else
-                {
-                    respawnTime = Time.time + respawnWaitTime;
-                }
+                respawnTime = Time.time + respawnWaitTime;
             }
             else
             {
-                if (respawnWaitTime != 0)
-                {
-                    respawnTime = Time.time + respawnWaitTime;
-                }
-                else
-                {
-                    Destroy(this.gameObject);
-                }
                 GameOver();
+                Destroy(gameObject);
             }
-
         }
         else
         {
             GameOver();
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
         GameManager.UpdateUIElements();
     }
 
-    public void GameOver()
+    void GameOver()
     {
-        if (GameManager.instance != null && gameObject.tag == "Player")
-        {
+        if (GameManager.instance != null && CompareTag("Player"))
             GameManager.instance.GameOver();
-        }
     }
 }
