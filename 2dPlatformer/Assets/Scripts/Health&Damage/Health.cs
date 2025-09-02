@@ -48,6 +48,9 @@ public class Health : MonoBehaviour, IDamageable
     // ===== IDamageable =====
     public void TakeDamage(int damageAmount, Transform hitSource = null, Vector2? hitPoint = null, float knockbackForce = 0f)
     {
+        Debug.Log(gameObject.name + " получил урон " + damageAmount + ". Источник: " + (hitSource != null ? hitSource.name : "null"));
+
+
         if (isInvincible || currentHealth <= 0)
             return;
 

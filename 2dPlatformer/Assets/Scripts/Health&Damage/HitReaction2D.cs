@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(AudioSource))]
 public class HitReaction2D : MonoBehaviour
 {
     [Header("Flash Settings")]
+    public SpriteRenderer flashRenderer; // можно указать вручную (например, PlayerSprite)
     public Color flashColor = Color.white;
     public float flashDuration = 0.1f;
 
@@ -15,18 +15,25 @@ public class HitReaction2D : MonoBehaviour
     [Tooltip("Звук, который проигрывается при получении урона")]
     public AudioClip hitSound;
 
-    private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private AudioSource audioSource;
     private Rigidbody2D rb;
 
     void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        // Если явно не указали flashRenderer — пробуем взять с текущего объекта
+        if (flashRenderer == null)
+        {
+            flashRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        if (flashRenderer != null)
+        {
+            originalColor = flashRenderer.color;
+        }
+
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
-
-        originalColor = spriteRenderer.color;
 
         // Настраиваем AudioSource
         audioSource.playOnAwake = false;
@@ -38,9 +45,14 @@ public class HitReaction2D : MonoBehaviour
     /// </summary>
     public void OnHit(Transform hitSource, Vector2? hitPoint, float customKnockbackForce = -1f)
     {
+        Debug.Log(gameObject.name + " проигрывает реакцию на урон");
+
         // Flash
-        StopAllCoroutines();
-        StartCoroutine(FlashCoroutine());
+        if (flashRenderer != null)
+        {
+            StopAllCoroutines();
+            StartCoroutine(FlashCoroutine());
+        }
 
         // Knockback
         if (hitSource != null && rb != null)
@@ -62,8 +74,8 @@ public class HitReaction2D : MonoBehaviour
 
     private System.Collections.IEnumerator FlashCoroutine()
     {
-        spriteRenderer.color = flashColor;
+        flashRenderer.color = flashColor;
         yield return new WaitForSeconds(flashDuration);
-        spriteRenderer.color = originalColor;
+        flashRenderer.color = originalColor;
     }
 }

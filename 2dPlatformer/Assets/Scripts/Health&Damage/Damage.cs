@@ -91,7 +91,7 @@ public class Damage : MonoBehaviour
         {
             if (collidedHealth.teamId != this.teamId)
             {
-                collidedHealth.TakeDamage(damageAmount);
+                collidedHealth.TakeDamage(damageAmount, this.transform);
                 if (destroyAfterDamage)
                 {
                     Destroy(this.gameObject);
