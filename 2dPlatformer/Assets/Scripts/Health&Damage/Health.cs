@@ -25,7 +25,6 @@ public class Health : MonoBehaviour, IDamageable
     private Vector3 respawnPosition;
 
     [Header("Effects")]
-    public GameObject hitEffect;
     public GameObject deathEffect;
 
     private HitReaction2D hitReaction;
@@ -51,9 +50,6 @@ public class Health : MonoBehaviour, IDamageable
     {
         if (isInvincible || currentHealth <= 0)
             return;
-
-        if (hitEffect != null)
-            Instantiate(hitEffect, transform.position, Quaternion.identity);
 
         isInvincible = true;
         timeToBecomeDamageable = Time.time + invincibilityTime;

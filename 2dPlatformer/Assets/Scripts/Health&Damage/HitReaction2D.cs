@@ -1,46 +1,81 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class HitReaction2D : MonoBehaviour
 {
-    [Header("Flash")]
-    public Color flashColor = Color.red;
+    [Header("Flash Settings")]
+    [Tooltip("Color to flash when hit")]
+    public Color flashColor = Color.white;
+    [Tooltip("Duration of flash effect in seconds")]
     public float flashDuration = 0.1f;
-    private SpriteRenderer sr;
-    private Color originalColor;
-    private Coroutine flashRoutine;
 
-    [Header("Knockback")]
-    public float defaultKnockbackForce = 5f;
+    [Header("Knockback Settings")]
+    [Tooltip("Force applied when hit (0 = no knockback)")]
+    public float knockbackForce = 5f;
+
+    [Header("Audio Settings")]
+    [Tooltip("Sound played when hit")]
+    public AudioClip hitSound;
+    
+    private AudioSource audioSource;
+
+    // Cached
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
     private Rigidbody2D rb;
 
     void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        originalColor = sr.color;
-    }
+        originalColor = spriteRenderer.color;
 
-    public void OnHit(Transform source, Vector2? hitPoint, float knockbackForce)
-    {
-        if (flashRoutine != null) StopCoroutine(flashRoutine);
-        flashRoutine = StartCoroutine(Flash());
-
-        float force = knockbackForce > 0 ? knockbackForce : defaultKnockbackForce;
-        if (force > 0 && source != null)
+        if (audioSource == null && hitSound != null)
         {
-            Vector2 dir = ((Vector2)transform.position - (Vector2)source.position).normalized;
-            rb.AddForce(dir * force, ForceMode2D.Impulse);
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
         }
     }
 
-    IEnumerator Flash()
+    /// <summary>
+    /// Главный метод: проигрывает все реакции на урон (звук, флэш, нокаут).
+    /// </summary>
+    public void OnHit(Transform hitSource, Vector2? hitPoint, float customKnockback = -1f)
     {
-        sr.color = flashColor;
+        PlayFlash();
+        PlaySound();
+        ApplyKnockback(hitSource, customKnockback);
+    }
+
+    private void PlayFlash()
+    {
+        StopAllCoroutines();
+        StartCoroutine(FlashCoroutine());
+    }
+
+    private IEnumerator FlashCoroutine()
+    {
+        spriteRenderer.color = flashColor;
         yield return new WaitForSeconds(flashDuration);
-        sr.color = originalColor;
-        flashRoutine = null;
+        spriteRenderer.color = originalColor;
+    }
+
+    private void PlaySound()
+    {
+        if (hitSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(hitSound);
+        }
+    }
+
+    private void ApplyKnockback(Transform hitSource, float customKnockback)
+    {
+        float force = customKnockback >= 0 ? customKnockback : knockbackForce;
+        if (force <= 0 || rb == null || hitSource == null) return;
+
+        Vector2 dir = (transform.position - hitSource.position).normalized;
+        rb.AddForce(dir * force, ForceMode2D.Impulse);
     }
 }
