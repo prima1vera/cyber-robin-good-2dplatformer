@@ -613,7 +613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashRenderer: {fileID: 8128307142859021831}
   flashColor: {r: 0.8584906, g: 0.14173192, b: 0.14173192, a: 1}
-  flashDuration: 0.1
+  flashDuration: 0.12
   knockbackForce: 3
   hitSound: {fileID: 8300000, guid: c5929d19ad41662449b65934aad7d486, type: 3}
 --- !u!1 &8128307142647824882

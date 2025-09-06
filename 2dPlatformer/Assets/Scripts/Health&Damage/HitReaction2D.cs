@@ -45,8 +45,6 @@ public class HitReaction2D : MonoBehaviour
     /// </summary>
     public void OnHit(Transform hitSource, Vector2? hitPoint, float customKnockbackForce = -1f)
     {
-        Debug.Log(gameObject.name + " проигрывает реакцию на урон");
-
         // Flash
         if (flashRenderer != null)
         {
