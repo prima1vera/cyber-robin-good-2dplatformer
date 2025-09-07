@@ -14,7 +14,7 @@ public class EnemyHealthBar : MonoBehaviour
     Coroutine animateCoroutine;
 
     [Header("Behaviour")]
-    public Vector3 worldOffset = new Vector3(0f, 1.5f, 0f);
+    //public Vector3 worldOffset = new Vector3(0f, 1.5f, 0f);
     public float showSecondsAfterHit = 2f;
     public float smoothTime = 0.12f;
 
@@ -62,7 +62,7 @@ public class EnemyHealthBar : MonoBehaviour
         if (targetHealth == null) return;
 
         // позиционирование над головой
-        transform.position = targetHealth.transform.position + worldOffset;
+        //transform.position = targetHealth.transform.position + worldOffset;
 
         // всегда смотрим к камере (billboard)
         if (mainCam != null)

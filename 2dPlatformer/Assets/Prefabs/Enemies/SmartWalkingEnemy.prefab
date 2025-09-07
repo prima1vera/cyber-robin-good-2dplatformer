@@ -1066,11 +1066,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2132513604231059244, guid: 5d3e78d3a03aaa941b430437321a8ada, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 425.68082
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 2132513604231059244, guid: 5d3e78d3a03aaa941b430437321a8ada, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 236.158
+      value: 0.48
       objectReference: {fileID: 0}
     - target: {fileID: 2132513604231059244, guid: 5d3e78d3a03aaa941b430437321a8ada, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1087,6 +1087,10 @@ PrefabInstance:
     - target: {fileID: 3437226745575618755, guid: 5d3e78d3a03aaa941b430437321a8ada, type: 3}
       propertyPath: m_Name
       value: EnemyHealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724657708287149516, guid: 5d3e78d3a03aaa941b430437321a8ada, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
