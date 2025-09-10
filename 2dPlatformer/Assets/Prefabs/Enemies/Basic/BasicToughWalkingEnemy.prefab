@@ -214,7 +214,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 2730577248693178806, guid: 70bbf34c014562d45bfb56a1baf6c649, type: 3}
-  m_Color: {r: 0.56078434, g: 1, b: 0.59700716, a: 1}
+  m_Color: {r: 1, g: 0.63349384, b: 0.56078434, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -322,9 +322,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamId: 1
-  defaultHealth: 7
-  maximumHealth: 7
-  currentHealth: 7
+  defaultHealth: 4
+  maximumHealth: 4
+  currentHealth: 4
   invincibilityTime: 0
   useLives: 0
   currentLives: 3
@@ -487,7 +487,7 @@ MonoBehaviour:
   flashRenderer: {fileID: 0}
   flashColor: {r: 0.8773585, g: 0.19389725, b: 0.07863116, a: 1}
   flashDuration: 0.12
-  knockbackForce: 0.5
+  knockbackForce: 2
   hitSound: {fileID: 8300000, guid: 64a898a6c85696b46b54a5b403c96ae5, type: 3}
 --- !u!1 &1668180095416603666
 GameObject:

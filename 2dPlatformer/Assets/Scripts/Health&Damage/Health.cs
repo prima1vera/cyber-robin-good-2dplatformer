@@ -66,11 +66,11 @@ public class Health : MonoBehaviour, IDamageable
     // Backwards-compatible simple call
     public void TakeDamage(int damageAmount)
     {
-        TakeDamage(damageAmount, null, null, 0f);
+        TakeDamage(damageAmount, null, null);
     }
 
     // Full API (used across the project)
-    public void TakeDamage(int damageAmount, Transform hitSource = null, Vector2? hitPoint = null, float knockbackForce = 0f)
+    public void TakeDamage(int damageAmount, Transform hitSource = null, Vector2? hitPoint = null)
     {
         if (isInvincible || currentHealth <= 0)
             return;
@@ -90,7 +90,7 @@ public class Health : MonoBehaviour, IDamageable
         // hit reaction (flash/knockback/sound) — if present
         if (hitReaction != null)
         {
-            hitReaction.OnHit(hitSource, hitPoint, knockbackForce);
+            hitReaction.OnHit(hitSource, hitPoint);
         }
 
         // death check — Die() calls OnDied internally

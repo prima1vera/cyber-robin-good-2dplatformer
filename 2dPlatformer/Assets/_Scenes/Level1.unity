@@ -1106,6 +1106,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7666682590710506008, guid: 6bf8cb6fdd993b34393eb1ebef3faa19, type: 3}
+      propertyPath: knockbackForce
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1125,11 +1129,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7888097173380007759, guid: ad3cd37dfc7506c49aa3885e4fb30f0e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.91
+      value: 9.61
       objectReference: {fileID: 0}
     - target: {fileID: 7888097173380007759, guid: ad3cd37dfc7506c49aa3885e4fb30f0e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.45
+      value: -1.49
       objectReference: {fileID: 0}
     - target: {fileID: 7888097173380007759, guid: ad3cd37dfc7506c49aa3885e4fb30f0e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1663,6 +1667,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1793652995}
     m_Modifications:
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: currentHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: defaultHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: maximumHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.b
+      value: 0.56880945
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.g
+      value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1668180095173353846, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
       propertyPath: m_Name
       value: BasicToughWalkingEnemy (2)
@@ -1706,6 +1734,10 @@ PrefabInstance:
     - target: {fileID: 1668180095173353851, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666682590710506008, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: knockbackForce
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2167,6 +2199,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7666682590710506008, guid: 6bf8cb6fdd993b34393eb1ebef3faa19, type: 3}
+      propertyPath: knockbackForce
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2467,6 +2503,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1793652995}
     m_Modifications:
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: currentHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: defaultHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: maximumHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.b
+      value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.g
+      value: 0.58438826
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1668180095173353846, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
       propertyPath: m_Name
       value: BasicToughWalkingEnemy
@@ -2510,6 +2570,10 @@ PrefabInstance:
     - target: {fileID: 1668180095173353851, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666682590710506008, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: knockbackForce
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2890,6 +2954,10 @@ PrefabInstance:
     - target: {fileID: 1668180095173353851, guid: 6bf8cb6fdd993b34393eb1ebef3faa19, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666682590710506008, guid: 6bf8cb6fdd993b34393eb1ebef3faa19, type: 3}
+      propertyPath: knockbackForce
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7020,6 +7088,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1793652995}
     m_Modifications:
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: currentHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: defaultHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167797280935117621, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: maximumHealth
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.b
+      value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.g
+      value: 0.5839546
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668180095173353844, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1668180095173353846, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
       propertyPath: m_Name
       value: BasicToughWalkingEnemy (1)
@@ -7063,6 +7155,10 @@ PrefabInstance:
     - target: {fileID: 1668180095173353851, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7666682590710506008, guid: 967fd8359485b7741903f2719ad42d97, type: 3}
+      propertyPath: knockbackForce
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

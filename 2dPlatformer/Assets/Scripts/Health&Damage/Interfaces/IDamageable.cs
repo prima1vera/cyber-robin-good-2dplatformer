@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    void TakeDamage(int damageAmount, Transform hitSource = null, UnityEngine.Vector2? hitPoint = null, float knockbackForce = 0f);
+    void TakeDamage(int damageAmount, Transform hitSource = null, UnityEngine.Vector2? hitPoint = null);
     void ReceiveHealing(int amount);
 }
 

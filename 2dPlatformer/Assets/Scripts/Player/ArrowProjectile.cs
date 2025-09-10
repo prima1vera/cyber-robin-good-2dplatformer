@@ -59,7 +59,7 @@ public class ArrowProjectile : MonoBehaviour
         {
             Vector2 hitPoint = other.ClosestPoint(transform.position);
             // Контекст удара отдаём в Health — он разрулит флэш/нокаут
-            health.TakeDamage(damage, transform, hitPoint, 5f);
+            health.TakeDamage(damage, transform, hitPoint);
         }
 
         StickTo(other.transform);

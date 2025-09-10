@@ -4,7 +4,7 @@ using UnityEngine;
 public class HitReaction2D : MonoBehaviour
 {
     [Header("Flash Settings")]
-    public SpriteRenderer flashRenderer; // можно указать вручную (например, PlayerSprite)
+    public SpriteRenderer flashRenderer; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, PlayerSprite)
     public Color flashColor = Color.white;
     public float flashDuration = 0.1f;
 
@@ -12,7 +12,7 @@ public class HitReaction2D : MonoBehaviour
     public float knockbackForce = 5f;
 
     [Header("Sound Settings")]
-    [Tooltip("Звук, который проигрывается при получении урона")]
+    [Tooltip("пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ")]
     public AudioClip hitSound;
 
     private Color originalColor;
@@ -21,7 +21,7 @@ public class HitReaction2D : MonoBehaviour
 
     void Awake()
     {
-        // Если явно не указали flashRenderer — пробуем взять с текущего объекта
+        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ flashRenderer пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (flashRenderer == null)
         {
             flashRenderer = GetComponent<SpriteRenderer>();
@@ -35,15 +35,15 @@ public class HitReaction2D : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
 
-        // Настраиваем AudioSource
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ AudioSource
         audioSource.playOnAwake = false;
         audioSource.loop = false;
     }
 
     /// <summary>
-    /// Вызывается при получении урона
+    /// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     /// </summary>
-    public void OnHit(Transform hitSource, Vector2? hitPoint, float customKnockbackForce = -1f)
+    public void OnHit(Transform hitSource, Vector2? hitPoint)
     {
         // Flash
         if (flashRenderer != null)
@@ -55,11 +55,10 @@ public class HitReaction2D : MonoBehaviour
         // Knockback
         if (hitSource != null && rb != null)
         {
-            float force = customKnockbackForce >= 0 ? customKnockbackForce : knockbackForce;
-            if (force > 0)
+            if (knockbackForce > 0)
             {
                 Vector2 direction = (transform.position - hitSource.position).normalized;
-                rb.AddForce(direction * force, ForceMode2D.Impulse);
+                rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
             }
         }
 
