@@ -214,7 +214,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 2730577248693178806, guid: 70bbf34c014562d45bfb56a1baf6c649, type: 3}
-  m_Color: {r: 1, g: 0.56078434, b: 0.56078434, a: 1}
+  m_Color: {r: 0.56078434, g: 1, b: 0.59700716, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -270,7 +270,7 @@ MonoBehaviour:
   leftEdge: {fileID: 4532630679372128672}
   rightEdge: {fileID: 8548067531479971156}
   walkDirection: 1
-  willTurnAroundAtEdge: 0
+  willTurnAroundAtEdge: 1
 --- !u!95 &-8329743731282777394
 Animator:
   serializedVersion: 5
@@ -322,9 +322,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamId: 1
-  defaultHealth: 4
-  maximumHealth: 4
-  currentHealth: 4
+  defaultHealth: 7
+  maximumHealth: 7
+  currentHealth: 7
   invincibilityTime: 0
   useLives: 0
   currentLives: 3
@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 3106064713681178979}
   - component: {fileID: 5842111123837050720}
   - component: {fileID: 4532630679372128672}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GroundTestLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -892,7 +892,7 @@ GameObject:
   - component: {fileID: 6498272042444196730}
   - component: {fileID: 1343679326160716715}
   - component: {fileID: 8548067531479971156}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GroundTestRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -318,7 +318,7 @@ MonoBehaviour:
   enemyComponent: {fileID: -5341878112430100836}
   enemyAnimator: {fileID: -8329743731282777394}
   IdleAnimatorParameter: isIdle
-  MovingAnimatorParameter: isWalking
+  MovingAnimatorParameter: isMoving
   DeadAnimatorParameter: isDead
 --- !u!114 &1167797280935117621
 MonoBehaviour:
@@ -333,9 +333,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamId: 1
-  defaultHealth: 2
-  maximumHealth: 2
-  currentHealth: 2
+  defaultHealth: 1
+  maximumHealth: 1
+  currentHealth: 1
   invincibilityTime: 0
   useLives: 0
   currentLives: 3
