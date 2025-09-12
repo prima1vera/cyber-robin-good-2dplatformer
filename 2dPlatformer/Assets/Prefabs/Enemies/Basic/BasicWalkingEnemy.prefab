@@ -393,7 +393,7 @@ MonoBehaviour:
   flashRenderer: {fileID: 1668180095173353844}
   flashColor: {r: 1, g: 0.08391793, b: 0, a: 1}
   flashDuration: 0.12
-  knockbackForce: 3
+  knockbackForce: 5
   hitSound: {fileID: 8300000, guid: 64a898a6c85696b46b54a5b403c96ae5, type: 3}
 --- !u!82 &2299731541822987306
 AudioSource:

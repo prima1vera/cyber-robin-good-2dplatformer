@@ -2333,6 +2333,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1793652995}
     m_Modifications:
+    - target: {fileID: 1668180095173353845, guid: 8ae4b22b07f2f8143a8eb37211ab517f, type: 3}
+      propertyPath: willTurnAroundAtEdge
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1668180095173353846, guid: 8ae4b22b07f2f8143a8eb37211ab517f, type: 3}
       propertyPath: m_Name
       value: BasicWalkingEnemy
@@ -2376,6 +2380,10 @@ PrefabInstance:
     - target: {fileID: 1668180095173353851, guid: 8ae4b22b07f2f8143a8eb37211ab517f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7300964462355967768, guid: 8ae4b22b07f2f8143a8eb37211ab517f, type: 3}
+      propertyPath: knockbackForce
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
