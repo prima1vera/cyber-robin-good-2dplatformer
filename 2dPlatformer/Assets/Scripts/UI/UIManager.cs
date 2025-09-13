@@ -40,6 +40,9 @@ public class UIManager : MonoBehaviour
     [Header("Input Actions & Controls")]
     public InputAction pauseAction;
 
+    private GameObject controlsHintPanel;
+    private Coroutine controlsHideCoroutine;
+
     // Whether the application is paused
     private bool isPaused = false;
 
@@ -175,6 +178,36 @@ public class UIManager : MonoBehaviour
         }      
     }
 
+    private void InitializeControlsAutoHide()
+    {
+        controlsHintPanel = GameObject.Find("ControlsFullHint");
+
+        if (controlsHintPanel == null)
+        {
+            return;
+        }
+
+        if (controlsHintPanel.activeSelf)
+        {
+            controlsHideCoroutine = StartCoroutine(AutoHideControlsRoutine(30));
+        }
+    }
+
+    private IEnumerator AutoHideControlsRoutine(float waitSeconds)
+    {
+        // ждем указанное реальное время (не зависит от timeScale)
+        float endTime = Time.unscaledTime + Mathf.Max(0f, waitSeconds);
+        while (Time.unscaledTime < endTime)
+        {
+            yield return null;
+        }
+
+        if (controlsHintPanel != null)
+            controlsHintPanel.SetActive(false);
+
+        controlsHideCoroutine = null;
+    }
+
     /// <summary>
     /// Description:
     /// Goes through all UI elements and calls their UpdateUI function
@@ -220,6 +253,7 @@ public class UIManager : MonoBehaviour
         SetUpUIElements();
         InitilizeFirstPage();
         UpdateUI();
+        InitializeControlsAutoHide();
     }
 
     /// <summary>
